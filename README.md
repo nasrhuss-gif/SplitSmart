@@ -1,0 +1,73 @@
+# SplitSmart — Lab 6
+
+Requirements and engineering principles for an expense-sharing product. No Java code has been generated.
+
+## Documents
+- [Original customer request](UserRequirement.md)
+- [Project constitution](.specify/memory/constitution.md)
+- [Feature specification, MVP proposal, and clarification questions](specs/001-splitsmart/spec.md)
+- [Requirements review checklist](specs/001-splitsmart/checklists/requirements.md)
+
+## Completed and pending work
+Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. The constitution and specification were authored in Codex and self-reviewed against the supplied request. They were not generated in a VS Code Copilot Chat session. Human review and customer clarification remain pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/lab6 .
+
+The full customer scope includes web, Android, and iOS. Java Swing is a proposed lab MVP implementation, with an explicit scope decision still required. All original features remain in the inventory, including proposed deferrals. Optional custom reporting remains tentative.
+
+## Environment check on 2026-10-29
+The execution terminal reported Python 3.9.6 through `python3`; `python` and `py` were unavailable. Git 2.50.1 is available. `uv`, `specify`, `code`, and `gh` were initially absent from PATH. These checks were run in the Codex execution terminal, not VS Code Terminal.
+
+A workspace-local uv 0.13.6 and managed Python 3.11.18 were installed outside this deliverable under `work/`. Spec Kit 1.2.5 required a compatible binary dependency here: `uv tool install specify-cli --with 'cryptography<46'` installed cryptography 45.0.7 after the default dependency attempted an unavailable Rust build. This is an environment workaround, not a customer requirement or application dependency.
+
+## Continue in VS Code
+Install VS Code and GitHub Copilot, sign in, and open this directory. Install uv following https://docs.astral.sh/uv/getting-started/installation/ if needed. Use normal ASCII hyphens in terminal commands:
+
+```sh
+python --version
+# Windows launcher, if available:
+py --version
+# macOS alternative:
+python3 --version
+uv --version
+git --version
+uv tool install specify-cli
+specify --help
+specify version
+```
+
+This project is already initialized; do not overwrite the reviewed files by reinitializing unnecessarily. For a new project, the lab command is `specify init . --integration copilot`. Official instructions: https://github.com/github/spec-kit/blob/main/docs/installation.md
+
+In Copilot Chat Agent mode, use the following prompts. Preserve existing drafts and review proposed changes before accepting them.
+
+```text
+/speckit-constitution
+Read UserRequirement.md as the original SplitSmart customer request.
+Create principles for Java 21, Maven, Java Swing, JUnit 5,
+PlantUML, object-oriented design, separation of GUI and business
+logic, BigDecimal for money, requirement traceability, and
+human review of AI output. Do not change UserRequirement.md.
+Distinguish customer requirements from implementation decisions.
+```
+
+```text
+/speckit-specify
+Read UserRequirement.md in this workspace as the authoritative
+customer requirements. Write a testable SplitSmart feature
+specification: actors, user scenarios, functional and
+non-functional requirements, acceptance criteria, requirement
+IDs (FR-001, etc.), and open questions. Preserve all original
+customer features in the requirements inventory; label the
+Java Swing MVP subset separately. Do not write Java code.
+Do not edit UserRequirement.md.
+```
+
+```text
+/speckit-clarify
+Review the SplitSmart specification against UserRequirement.md.
+Ask about missing or ambiguous behavior: payer versus
+participants, group membership, rounding, invalid amounts,
+percentage totals, authentication, notifications, and balance
+settlement. Do not silently invent answers. Record decisions
+and update the specification only after confirmation.
+```
+
+After confirmation, update the specification and checklist, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/lab6 . Customer clarification and human review remain pending.
