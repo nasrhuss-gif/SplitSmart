@@ -12,7 +12,7 @@ Download [SplitSmart-SpecKit.zip](SplitSmart-SpecKit.zip) and extract it into a 
 - [Requirements review checklist](specs/001-splitsmart/checklists/requirements.md)
 
 ## Completed and pending work
-Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. The constitution and specification were authored in Codex and self-reviewed against the supplied request. They were not generated in a VS Code Copilot Chat session. Human review and customer clarification remain pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/lab6 .
+Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. The constitution and specification were authored in Codex and self-reviewed against the supplied request. They were not generated in a VS Code Copilot Chat session. Human review and customer clarification remain pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/SplitSmart .
 
 The full customer scope includes web, Android, and iOS. Java Swing is a proposed lab MVP implementation, with an explicit scope decision still required. All original features remain in the inventory, including proposed deferrals. Optional custom reporting remains tentative.
 
@@ -73,4 +73,4 @@ settlement. Do not silently invent answers. Record decisions
 and update the specification only after confirmation.
 ```
 
-After confirmation, update the specification and checklist, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/lab6 . Customer clarification and human review remain pending.
+After confirmation, update the specification and checklist, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/SplitSmart . Customer clarification and human review remain pending.
