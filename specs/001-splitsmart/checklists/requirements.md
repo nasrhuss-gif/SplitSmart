@@ -16,6 +16,6 @@ Review: 2026-10-29, AI-assisted self-review. Human review pending.
 - [ ] Acceptance examples updated with confirmed monetary and workflow rules.
 - [ ] Human reviewer records name, date, findings, and acceptance.
 - [x] Actual Spec Kit 1.2.5 initialization with Copilot integration verified.
-- [x] Project committed to public repository https://github.com/nasrhuss-gif/lab6 (publication step; customer clarification remains pending).
+- [x] Project committed to public repository https://github.com/nasrhuss-gif/SplitSmart (publication step; customer clarification remains pending).
 
 Finding: the original platform requirement and Swing lab constraint differ. This is visible in the inventory and MVP section and remains unresolved with the customer. Clarification is pending; unchecked items are not completed steps.
