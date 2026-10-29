@@ -2,6 +2,9 @@
 
 Requirements and engineering principles for an expense-sharing product. No Java code has been generated.
 
+## Complete initialized project
+Download [SplitSmart-SpecKit.zip](SplitSmart-SpecKit.zip) and extract it into a project folder to obtain all generated Copilot commands, Spec Kit templates, scripts, and documents. The main lab documents are also browsable in this repository.
+
 ## Documents
 - [Original customer request](UserRequirement.md)
 - [Project constitution](.specify/memory/constitution.md)
