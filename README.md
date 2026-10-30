@@ -14,7 +14,7 @@ Download [SplitSmart-SpecKit.zip](SplitSmart-SpecKit.zip) and extract it into a 
 - [Requirements review checklist](specs/001-splitsmart/checklists/requirements.md)
 
 ## Completed and pending work
-Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. Initial drafts were authored in Codex, then reviewed and revised through `/speckit-constitution` and `/speckit-specify` in VS Code 1.144.0 Copilot Agent mode on 2026-10-29. `/speckit-clarify` also ran and asked a follow-up login-method question. The user confirmed initial clarification decisions D1–D9 on 2026-10-29; remaining details and human review are pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/SplitSmart .
+Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. Initial drafts were authored in Codex, then reviewed and revised through `/speckit-constitution` and `/speckit-specify` in VS Code 1.144.0 Copilot Agent mode on 2026-10-29. `/speckit-clarify` also ran, asked a follow-up login-method question, and incorporated the user-confirmed email/password, email verification, and password recovery choice as D10. The user confirmed initial clarification decisions D1–D10 on 2026-10-29; remaining details and human review are pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/SplitSmart .
 
 The full customer scope includes web, Android, and iOS. Java Swing is a proposed lab MVP implementation, with an explicit scope decision still required. All original features remain in the inventory, including proposed deferrals. Optional custom reporting remains tentative.
 
@@ -77,4 +77,4 @@ settlement. Do not silently invent answers. Record decisions
 and update the specification only after confirmation.
 ```
 
-The three prompts above have now been run in Copilot Agent mode. Confirm any remaining questions, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/SplitSmart . Initial clarification decisions D1–D9 are confirmed; remaining details and human review are pending.
+The three prompts above have now been run in Copilot Agent mode. Confirm any remaining questions, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/SplitSmart . Initial clarification decisions D1–D10 are confirmed; remaining details and human review are pending.

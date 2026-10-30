@@ -17,7 +17,7 @@ Reviewed UserRequirement.md, .specify/memory/constitution.md, specs/001-splitsma
 ## Remaining work
 - Update: the user confirmed initial clarification decisions D1–D9 on 2026-10-29. Acceptance cases AC-D1–AC-D9 are now recorded. Remaining details are explicitly open in clarification-decisions.md.
 - Acceptance criteria that reference unresolved policies cannot be finalized until answers are confirmed. Record confirmed answers with date and approver, then revise the affected criteria.
-- The documents were created in Codex. The prescribed `/speckit-constitution` and `/speckit-specify` workflows completed in VS Code 1.144.0 Copilot Agent mode on the Mac. `/speckit-clarify` also ran and asked a follow-up login-method question. Its interactive clarification is pending the user response.
+- The documents were created in Codex. The prescribed `/speckit-constitution` and `/speckit-specify` workflows completed in VS Code 1.144.0 Copilot Agent mode on the Mac. `/speckit-clarify` also ran and asked a follow-up login-method question. The user confirmed email/password with email verification and password recovery; D10 records this answer and Q6 retains only unresolved details.
 - A human still needs to review the documents. Do not mark customer clarification or human approval complete solely because this AI review exists.
 
 ## Submission
@@ -35,3 +35,6 @@ Publication is complete. This report does not claim that the unresolved clarific
 - Spec Kit's current prerequisite script uses SPECIFY_FEATURE_DIRECTORY=specs/001-splitsmart for explicit feature selection; a direct check with that setting resolved the existing feature successfully. No new feature or branch was created.
 
 Software checks were repeated through Copilot terminal tools in VS Code: python and py unavailable; python3 3.9.6; uv 0.13.6; specify --help available.
+
+## Confirmed authentication follow-up
+On 2026-10-29 the user confirmed email/password with email verification and password recovery. Copilot recorded D10, updated FR-001 and the account-access journey, and added AC-D10 and a dated clarification session. Other unanswered questions and human review remain pending.
