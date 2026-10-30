@@ -74,7 +74,7 @@ consistency with confirmed decisions. A release MUST NOT claim customer complian
 required platforms or unresolved acceptance rules remain outstanding.
 
 ## Governance
-This constitution is proposed for human review. Amendments MUST include a rationale and
+This constitution is approved by the user of this chat following explicit review on 2026-10-29. Confirmed product/lab decisions are recorded as D1–D23 in specs/001-splitsmart/clarification-decisions.md. Amendments MUST include a rationale and
 impact assessment, update the version and amendment date, and receive human approval.
 Recheck affected requirements, diagrams, and tests after each amendment. Use semantic
 versioning: MAJOR for backward-incompatible governance or principle changes, MINOR for
@@ -82,7 +82,11 @@ added principles or materially expanded guidance, and PATCH for clarifications a
 non-semantic refinements. Reviewers MUST verify compliance with this constitution during
 specification, design, implementation, and release reviews.
 
-**Version**: 1.1.1 | **Ratified**: Pending human review | **Last Amended**: 2026-10-29
+**Version**: 1.2.0 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-10-29
 
-Review note: version 1.1.1 restores explicit monetary invariants from the original
-constitution and corrects the ratification status; no human ratification is claimed.
+
+Review record: the user of this chat explicitly stated “I reviewed and approve them”
+on 2026-10-29 for the constitution, specification, and checklist, subject to
+incorporating approved decisions D11–D23. Those decisions are now incorporated.
+Version 1.2.0 records this ratification and expanded confirmed decision baseline.
+Documentation approval does not assert implementation, executed tests, or platform delivery.
