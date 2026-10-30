@@ -12,8 +12,9 @@ Review: 2026-10-29, AI-assisted self-review. Human review pending.
 - [x] Monetary invariants and unapproved-expense exclusion documented.
 - [x] Payer, membership, rounding, invalid values, percentages, authentication, notification, and settlement ambiguities explicitly recorded.
 - [x] No Java code generated.
-- [ ] Customer confirms Q1–Q13 and MVP boundaries.
-- [ ] Acceptance examples updated with confirmed monetary and workflow rules.
+- [x] User confirmed initial lab rules D1–D9 on 2026-10-29; see clarification-decisions.md.
+- [ ] Customer confirms remaining question details and MVP boundaries.
+- [x] Acceptance cases AC-D1–AC-D9 added for confirmed monetary and workflow rules.
 - [ ] Human reviewer records name, date, findings, and acceptance.
 - [x] Actual Spec Kit 1.2.5 initialization with Copilot integration verified.
 - [x] Project committed to public repository https://github.com/nasrhuss-gif/SplitSmart (publication step; customer clarification remains pending).
