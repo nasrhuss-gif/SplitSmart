@@ -1,24 +1,88 @@
 # SplitSmart Constitution
 
-Version: 1.0.0 | Adopted: 2026-10-29 | Status: proposed for human review
+## Core Principles
 
-## I. Authority and scope
-UserRequirement.md is the unchanged authoritative customer request. Every customer capability must remain in the requirements inventory. Customer requirements, lab constraints, proposed implementation choices, and confirmed decisions must be separately labeled. The Swing MVP does not fulfill or replace the customer's primary web and Android/iOS delivery requirements. Unanswered questions remain unresolved; AI output cannot constitute customer confirmation.
+### I. Java 21
+The Java lab implementation MUST target Java 21. Java 21 is an implementation constraint
+for this lab, not a requirement stated by the customer.
 
-## II. Java and build discipline
-The lab implementation shall use Java 21 and Maven with declared, reproducible dependency versions. These are lab engineering decisions, not original customer requirements. No Java implementation is authorized in this documentation phase.
+### II. Maven
+The Java lab implementation MUST use Maven. The build MUST declare dependency versions and
+the Java 21 release target so that builds are reproducible. Maven is an implementation
+choice, not a customer requirement.
 
-## III. Object-oriented boundaries
-Use cohesive domain objects and explicit application services. Java Swing views and event handlers shall delegate expense, approval, allocation, balance, payment, and reporting rules to business logic without Swing dependencies. Persistence and notification mechanisms shall be replaceable through interfaces. Avoid introducing architecture without a requirement or justified design need.
+### III. Java Swing
+The lab desktop interface MUST use Java Swing. Swing is a lab implementation decision and
+MUST NOT be represented as satisfying the customer's primary web and Android/iOS platform
+requirements.
 
-## IV. Monetary correctness
-Represent money and percentage arithmetic with BigDecimal, never binary floating-point. Currency, allowed scale, rounding mode, residual allocation, percentage precision, and payment semantics require confirmed decisions. Allocation totals must equal the expense amount; ledger entries must conserve value; unapproved expenses must not affect balances. Rules shall be deterministic and testable once confirmed.
+### IV. Object-Oriented Design
+Java code MUST use cohesive types with explicit responsibilities and encapsulated state.
+New abstractions MUST address a documented requirement or a demonstrated design need.
 
-## V. Evidence and testing
-Use JUnit 5 to verify confirmed acceptance criteria, monetary boundaries, approval transitions, invalid input, settlement, and balance conservation. Use PlantUML for reviewed domain, sequence, and state diagrams when design begins. Trace each design element and meaningful test to requirement IDs. Generated diagrams and tests must agree with the specification.
+### V. GUI and Business Logic Separation
+Swing views and event handlers MUST delegate expense, approval, allocation, balance,
+payment, and reporting rules to business logic. Business logic MUST NOT depend on Swing
+classes, so those rules can be tested without constructing a GUI.
 
-## VI. Traceability and review
-Maintain requirement IDs, source references, acceptance criteria, MVP disposition, open questions, and a dated decision log. Human reviewers must inspect AI output for omissions, invented behavior, contradictions, and scope drift before accepting it. Do not label a review complete without an actual reviewer and date.
+### VI. BigDecimal Monetary Correctness
+Money and percentage-based allocation arithmetic MUST use `BigDecimal`, never binary
+floating-point types. Currency, scale, rounding, residual allocation, percentage precision,
+and payment semantics MUST remain open until confirmed; this constitution does not decide
+them. Once confirmed, allocation and ledger rules MUST be deterministic and testable.
+Allocated shares MUST sum exactly to the expense amount, ledger entries MUST conserve
+value, and unapproved expenses MUST NOT affect balances.
+
+### VII. JUnit 5 Verification
+Automated Java tests MUST use JUnit 5 and trace to confirmed acceptance criteria. Tests
+MUST cover applicable monetary boundaries, approval transitions, invalid input, settlement,
+and balance conservation without assuming unresolved business rules.
+
+### VIII. PlantUML Design Artifacts
+When design diagrams are created, they MUST use PlantUML and be reviewed for consistency
+with the current specification. Diagrams MUST identify the requirements they represent;
+they MUST NOT imply decisions that remain open.
+
+### IX. Requirement Traceability
+Maintain stable requirement IDs, source references, acceptance criteria, implementation
+disposition, open questions, and a dated decision log. Trace design elements and meaningful
+tests to the requirements they address. Preserve all customer capabilities in the
+requirements inventory, including capabilities deferred from a lab MVP.
+
+### X. Human Review of AI Output
+AI-generated requirements, decisions, diagrams, tests, and code MUST receive human review
+before acceptance. Reviewers MUST check for omissions, invented behavior, contradictions,
+and scope drift. A review is complete only when an actual reviewer and review date are
+recorded; AI output is not customer confirmation.
+
+## Customer Requirements and Implementation Decisions
+`UserRequirement.md` is the unchanged authoritative customer request and MUST NOT be
+rewritten as part of this workflow. The customer's requested capabilities include user
+accounts, groups, expenses, notifications, approval, balance and payment tracking,
+reporting, and a primary web product with Android and iOS apps. These requirements MUST
+remain distinct from lab constraints, proposed implementation choices, and confirmed
+customer decisions. The Java 21, Maven, Java Swing, JUnit 5, and PlantUML choices in this
+constitution are engineering decisions for the lab, not original customer requirements.
+The Swing lab MVP does not fulfill or replace the customer's requested platforms. Open
+questions remain unresolved until confirmed; no implementation choice or AI output may be
+presented as customer confirmation.
+
+## Development Workflow and Quality Gates
+No Java implementation is authorized by this documentation workflow alone. Before a
+change is accepted, review its requirement traceability, affected tests and diagrams, and
+consistency with confirmed decisions. A release MUST NOT claim customer compliance while
+required platforms or unresolved acceptance rules remain outstanding.
 
 ## Governance
-Changes require a rationale, impact assessment, version update, and human approval. Recheck affected requirements, diagrams, and tests. UserRequirement.md must not be edited by these workflows. A release must not claim customer compliance while required platforms or unresolved acceptance rules remain outstanding.
+This constitution is proposed for human review. Amendments MUST include a rationale and
+impact assessment, update the version and amendment date, and receive human approval.
+Recheck affected requirements, diagrams, and tests after each amendment. Use semantic
+versioning: MAJOR for backward-incompatible governance or principle changes, MINOR for
+added principles or materially expanded guidance, and PATCH for clarifications and
+non-semantic refinements. Reviewers MUST verify compliance with this constitution during
+specification, design, implementation, and release reviews.
+
+**Version**: 1.1.1 | **Ratified**: Pending human review | **Last Amended**: 2026-10-29
+
+Review note: version 1.1.1 restores explicit monetary invariants from the original
+constitution and corrects the ratification status; no human ratification is claimed.
