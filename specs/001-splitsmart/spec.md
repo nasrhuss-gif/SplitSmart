@@ -2,12 +2,17 @@
 
 **Feature Directory**: `specs/001-splitsmart`
 **Created**: 2026-10-29
-**Status**: Draft; confirmed lab decisions D1-D9 incorporated, remaining questions and human review pending
+**Status**: Draft; confirmed lab decisions D1-D10 incorporated, remaining questions and human review pending
 **Input**: Authoritative customer request in [UserRequirement.md](../../UserRequirement.md)
 **Engineering Constraints**: [Project constitution](../../.specify/memory/constitution.md)
 
 This specification preserves the complete customer feature inventory. P-labels below
 organize review and do not establish customer-approved launch priority or MVP scope.
+
+## Clarifications
+
+### Session 2026-10-29
+- Q: Which sign-in method should account holders use to create accounts and access SplitSmart? → A: Email/password with email verification and password recovery.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -31,15 +36,18 @@ groups to organize shared expenses.
 **Why this priority**: Account access and groups provide the context for the product's
 shared expense workflows.
 
-**Independent Test**: Authenticate an account holder, verify access to their own
-information, then create a group and verify group expenses can be associated with it.
+**Independent Test**: Verify email/password sign-in, email verification, password recovery,
+and access to an account holder's own information, then create a group and verify group
+expenses can be associated with it.
 
 **Acceptance Scenarios**:
 1. **Given** a registered account holder and an unauthenticated session, **When** the
 	 person requests their expense or balance information, **Then** access is denied.
 2. **Given** an account holder who has authenticated, **When** they access their account,
 	 **Then** their own expense and balance information is available.
-3. **Given** an account holder, **When** they create a group, **Then** the group is
+3. **Given** a person setting up an account, **When** they register and sign in, **Then**
+	 email/password sign-in, email verification, and password recovery are supported (D10).
+4. **Given** an account holder, **When** they create a group, **Then** the group is
 	 available for organizing shared expenses; membership permissions follow Q2.
 
 ### User Story 2 - Submit a shared expense (Priority: P1)
@@ -160,18 +168,18 @@ iOS against the customer-approved browser and OS support matrix.
 ### Functional Requirements
 
 All rows remain in the full customer feature inventory regardless of proposed MVP
-disposition. “MUST” formalizes a source capability or confirmed D1-D9 decision. It does
+disposition. “MUST” formalizes a source capability or confirmed D1-D10 decision. It does
 not resolve linked open questions or approve the proposed MVP.
 
 | ID | Customer capability | Observable acceptance criterion | Open questions |
 |---|---|---|---|
-| FR-001 | Individual user accounts and login | An account holder must authenticate before accessing their own expense and balance information; an unauthenticated person cannot access that information. Authentication method, recovery, and group-data permissions remain open. | Q6 |
+| FR-001 | Individual user accounts and login | Account access uses email and password; email verification and password recovery are supported. An account holder must authenticate before accessing their own expense and balance information; an unauthenticated person cannot access that information. Persistence protections and shared-data permissions remain open. | Q6 |
 | FR-002 | Create and manage groups | A user can create and manage groups and view group expenses and balances; group-management permissions and the effects of membership changes remain open. | Q2 |
 | FR-003 | Create an expense | A submitted expense retains its amount, date, description, split manner, selected participants, and exactly one payer. The payer may also be a participant. Reject zero, negative, or malformed amounts. | Q1, Q4 |
 | FR-004 | Equal splitting | For USD expenses with two decimal places, allocate equal shares among selected participants and distribute any remaining cents in stable participant order; shares must total the expense amount. The stable ordering key remains open. | Q1, Q3 |
 | FR-005 | Percentage splitting | Reject percentage inputs that do not total 100%. For valid inputs, allocations must total the USD expense amount and follow the entered percentages; precision and fractional-cent rounding remain open. | Q3, Q5 |
 | FR-006 | Optional receipt image | An expense can be submitted without a receipt or with an allowed receipt image. Supported formats, size limits, retention, and access rules remain open. | Q10 |
-| FR-007 | Select involved users | The creator can select expense participants only from current members of the expense group. The payer may be a participant; payer and creator need not be assumed to be the same person. | Q1, Q2 |
+| FR-007 | Select involved users | The creator can select expense participants only from current members of the expense group. The payer may be a participant (D1); creator/payer identity restrictions remain open (Q1). | Q1, Q2 |
 | FR-008 | New-expense notifications | Submitting an expense triggers an in-app notification. Exact recipients and delivery, retry, and read behavior remain open. | Q7 |
 | FR-009 | Review and approve before balance adjustment | A group manager must approve a submitted expense once before it affects balances. Approval posts its financial effect exactly once; rejection, edits, resubmission, and self-approval rules remain open. | Q8 |
 | FR-010 | Pairwise balance tracking | Each user's amount owed to each other user reflects approved expenses and recorded pairwise settlements. Submitted or rejected expenses have no balance effect; an approved expense is posted once. | Q1, Q3, Q8, Q9 |
@@ -192,7 +200,7 @@ These lab engineering constraints are not original customer requirements.
 | NFR-002 | Lab engineering | Keep Swing presentation separate from business rules; verify business-rule tests can run without starting the GUI. |
 | NFR-003 | Lab engineering | Use BigDecimal for monetary arithmetic; verify confirmed allocation and ledger invariants with JUnit 5 without assuming unresolved rounding rules. |
 | NFR-004 | Lab engineering | Maintain requirement-to-design/test traceability and use reviewed, requirement-linked PlantUML diagrams when design diagrams are created. |
-| NFR-005 | Derived, pending confirmation | Enforce account ownership and confirmed group permissions; verify allowed and denied access cases. Authentication mechanism and recovery remain open (Q6). |
+| NFR-005 | Derived, pending confirmation | Enforce account ownership and confirmed group permissions; verify allowed and denied access cases. Data persistence protections and shared-data permissions remain open (Q6). |
 | NFR-006 | Customer quality targets unspecified | Performance, capacity, accessibility, availability, retention, recovery, and browser/OS targets remain open (Q12-Q13); no numeric customer target is invented. |
 | NFR-007 | Lab engineering | Record a human reviewer's identity, date, findings, and disposition before AI-generated project artifacts are accepted. |
 
@@ -206,8 +214,8 @@ Proposed deferral: receipt images (FR-006), notifications (FR-008), optional cus
 reports (FR-013), web (FR-014), Android (FR-015), and iOS (FR-016). These remain customer
 inventory items and are not deleted or waived. Neither this MVP boundary nor its deferrals
 are customer-approved. A Swing demonstration does not fulfill the web and mobile platform
-requirements. Mock login, local-only persistence, a specific authentication mechanism,
-additional approval rules, or unresolved monetary behavior are not approved defaults.
+requirements. Mock login, local-only persistence, additional approval rules, or unresolved monetary
+behavior are not approved defaults. The authentication method is confirmed by D10.
 
 ### Key Entities
 - **Account**: a person's authenticated identity and access to their own information.
@@ -249,9 +257,10 @@ additional approval rules, or unresolved monetary behavior are not approved defa
 ## Assumptions
 - USD and two decimal places apply to lab expense and payment examples because D3
 	explicitly confirmed them; no additional currencies are assumed.
-- One payer, group-member participants, real login, an in-app submission notification,
+- One payer, group-member participants, email/password sign-in with email verification and
+  password recovery, an in-app submission notification,
 	one group-manager approval, pairwise settlement, partial payments, and rejection of
-	overpayments apply only as confirmed in D1-D9.
+	overpayments apply only as confirmed in D1-D10.
 - The customer-requested platform list remains web, Android, and iOS. The Java Swing MVP
 	is a lab proposal and is not assumed to be an accepted substitute.
 - Custom reporting remains tentative because the customer said “possibly”; it is not
@@ -261,7 +270,7 @@ additional approval rules, or unresolved monetary behavior are not approved defa
 
 ## Open Questions
 
-Confirmed answers D1-D9 are recorded in [clarification-decisions.md](clarification-decisions.md).
+Confirmed answers D1-D10 are recorded in [clarification-decisions.md](clarification-decisions.md).
 The questions below retain the original stable IDs and list only details not settled by
 those decisions.
 
@@ -272,7 +281,7 @@ those decisions.
 | Q3 | What stable participant ordering key applies to residual cents? What rounding mode applies to fractional-cent percentage allocations? Are cross-currency expenses supported beyond confirmed USD examples? | FR-003-FR-005, FR-010-FR-011 |
 | Q4 | How should missing, excessive, or malformed dates and descriptions be handled? Are refunds supported? | FR-003 |
 | Q5 | What percentage precision or tolerance is accepted, and how are fractional-cent shares rounded while preserving the total? | FR-005 |
-| Q6 | What login and account-recovery methods, persistence protections, and shared-data permissions are required? | FR-001-FR-002, FR-012 |
+| Q6 | What data persistence protections and shared-data permissions are required? | FR-001-FR-002, FR-012 |
 | Q7 | Which members receive in-app notifications, and what delivery, retry, and read behavior is required? | FR-008 |
 | Q8 | Can a creator approve their own expense? What happens on rejection, edits, cancellation, or resubmission? | FR-009-FR-010 |
 | Q9 | Who confirms payments, and what are the reversal and duplicate-submission rules? Payment transfer is not specified by the customer. | FR-010-FR-011 |
@@ -283,7 +292,7 @@ those decisions.
 
 ## Decision Log and Readiness
 
-The user confirmed D1-D9 on 2026-10-29, as recorded in clarification-decisions.md.
+The user confirmed D1-D10 on 2026-10-29, as recorded in clarification-decisions.md.
 Those decisions supersede unanswered portions of Q1-Q9 only as explicitly stated.
 Remaining details require confirmation. The MVP deferral list remains unapproved, and
 this draft remains subject to human review. `UserRequirement.md` remains unchanged.
@@ -301,8 +310,8 @@ this draft remains subject to human review. `UserRequirement.md` remains unchang
 - **AC-D5 (FR-005)**: For USD 10.00 and valid percentages 60/40, allocate 6.00/4.00.
 	Reject totals of 90% or 110%. Percentage precision and fractional rounding remain open.
 - **AC-D6 (FR-001)**: Account holders must authenticate through real login before
-	accessing their own information. Mock identity selection does not meet D6; mechanism
-	and recovery remain open.
+	accessing their own information. Mock identity selection does not meet D6. Authentication and recovery
+	follow D10; persistence protections and shared-data permissions remain open.
 - **AC-D7 (FR-008)**: Submission triggers an in-app expense notification. Exact recipients
 	and delivery details still require confirmation.
 - **AC-D8 (FR-009/010)**: A submitted expense has no balance effect until one group-manager
@@ -311,3 +320,6 @@ this draft remains subject to human review. `UserRequirement.md` remains unchang
 - **AC-D9 (FR-011)**: Given A owes B USD 20.00, recording A's USD 5.00 payment to B leaves
 	USD 15.00 owed. Reject a USD 25.00 payment against that original USD 20.00 debt.
 	Confirmation, reversals, and duplicate detection remain open.
+- **AC-D10 (FR-001)**: Account access uses email and password; email verification and
+	password recovery are supported. Data persistence protections and shared-data permissions
+	remain open under Q6.

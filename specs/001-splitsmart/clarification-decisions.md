@@ -13,6 +13,7 @@ Confirmed by the user in this chat on 2026-10-29 in response to the proposed rul
 | D7 | Send in-app notifications when expenses are submitted. | Q7; FR-008 |
 | D8 | One group-manager approval is required before an expense posts to balances. | Q8; FR-009–010 |
 | D9 | Record pairwise settlement payments. Partial payments are allowed; reject overpayments. | Q9; FR-010–011 |
+| D10 | Use email/password sign-in with email verification and password recovery. | Q6; FR-001 |
 
 ## Remaining details
-Confirmation of the rules above does not resolve creator/payer identity restrictions, the exact stable ordering key or rounding mode, group-management permissions/history on removal, authentication method and recovery, notification recipients/retry behavior, reviewer self-approval/rejection/edit rules, payment confirmation/reversal/idempotency, receipt limits, report filters, platform versions, or quality targets. Ask about these details before implementing affected behavior. The proposed Swing MVP/deferral list is not approved by this confirmation.
+Confirmation of the rules above does not resolve creator/payer identity restrictions, the exact stable ordering key or rounding mode, group-management permissions/history on removal, data persistence protections and shared-data permissions, notification recipients/retry behavior, reviewer self-approval/rejection/edit rules, payment confirmation/reversals/idempotency, receipt limits, report filters, platform versions, or quality targets. Ask about these details before implementing affected behavior. The proposed Swing MVP/deferral list is not approved by this confirmation.
