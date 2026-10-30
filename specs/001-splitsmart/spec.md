@@ -1,325 +1,216 @@
 # Feature Specification: SplitSmart Expense Sharing
 
 **Feature Directory**: `specs/001-splitsmart`
-**Created**: 2026-10-29
-**Status**: Draft; confirmed lab decisions D1-D10 incorporated, remaining questions and human review pending
-**Input**: Authoritative customer request in [UserRequirement.md](../../UserRequirement.md)
-**Engineering Constraints**: [Project constitution](../../.specify/memory/constitution.md)
+**Created / Clarified / Reviewed**: 2026-10-29
+**Status**: Approved lab documentation baseline; D1–D23 confirmed and incorporated. Implementation is not claimed.
+**Authority**: [Original customer request](../../UserRequirement.md)
+**Engineering constraints**: [Constitution](../../.specify/memory/constitution.md)
+**Decision record**: [D1–D23](clarification-decisions.md)
 
-This specification preserves the complete customer feature inventory. P-labels below
-organize review and do not establish customer-approved launch priority or MVP scope.
+Customer capabilities and requested platforms are preserved separately from subsequent lab decisions. Priority labels organize review; delivery scope is governed by D22. No Java code is part of this documentation phase.
 
 ## Clarifications
 
 ### Session 2026-10-29
-- Q: Which sign-in method should account holders use to create accounts and access SplitSmart? → A: Email/password with email verification and password recovery.
+- The user confirmed the initial expense, money, membership, notification, approval, and payment rules D1–D9.
+- Q: Which sign-in method? → A: Email/password with email verification and password recovery (D10).
+- Q: Approve the complete remaining-decisions proposal D11–D23? → A: “Approve D11–D23.”
+- Q: After reviewing the constitution, specification, and checklist, approve them subject to incorporating the confirmed decisions? → A: “I reviewed and approve them.”
+- The approved D11–D23 policies are integrated below. UserRequirement.md is unchanged.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing
 
 ### Actors
-- **Account holder**: authenticates and accesses their own expense and balance information.
-- **Group member**: participates in group expenses and receives applicable notifications.
-- **Group manager**: creates or manages a group; detailed membership permissions remain open (Q2).
-- **Expense creator**: submits an expense; whether the creator may differ from its payer remains unresolved (Q1).
-- **Payer**: the single person recorded as paying an expense; may also be a participant (D1).
-- **Participant**: a current group member included in an expense allocation (D2).
-- **Approving group manager**: approves a submitted expense once before it affects balances (D8).
-- **Payment recorder**: records pairwise settlement payments; identity and confirmation rules remain open (Q9).
+- Account holder: registers, verifies email, signs in, recovers access, and reads authorized information.
+- Group member/participant: shares expenses and receives in-app notifications.
+- Group manager: manages membership and reviews another creator's expenses/reversals.
+- Expense creator: submits an expense and explicitly selects its payer and participants.
+- Payer: the one member who funded the full expense; may be different from creator or excluded from participants.
+- Debtor/payment recorder: records a payment made outside SplitSmart.
+- Payment recipient: confirms receipt; both parties confirm any reversal.
 
-These are capabilities and do not imply separate account types or settle any open
-permissions questions.
+### User Story 1 — Accounts and groups (P1)
+**Scenario**: A person registers, verifies email, signs in, and creates a group or private pair.
+**Independent test**: Exercise registration/verification/recovery, permitted group access, and denied unrelated-group access.
 
-### User Story 1 - Access accounts and groups (Priority: P1)
-An account holder signs in, accesses their own expense and balance information, and uses
-groups to organize shared expenses.
+1. Given an unverified email or unauthenticated session, when account access is requested, then deny access.
+2. Given a valid single-use verification/reset link, when consumed within 30 minutes, then perform its intended action once; reject expired or reused links.
+3. Given a manager adding/removing a registered member, when removal is requested with a nonzero balance or pending item, then reject removal and preserve history.
+4. Given two individuals sharing directly, when a private pair is created, then both are members/managers and the same expense/approval/payment rules apply.
 
-**Why this priority**: Account access and groups provide the context for the product's
-shared expense workflows.
+### User Story 2 — Expense creation and splitting (P1)
+**Scenario**: A member submits a USD expense, optionally with a receipt, choosing payer and participants.
+**Independent test**: Compare recorded fields and equal/percentage allocations against D11–D15/D20.
 
-**Independent Test**: Verify email/password sign-in, email verification, password recovery,
-and access to an account holder's own information, then create a group and verify group
-expenses can be associated with it.
+1. Given current members A, B, and C, when A creates an expense paid by B for participants A and C, then accept the roles and do not charge B a participant share.
+2. Given USD 10.00 and equal participants with ascending immutable IDs A, B, C, when allocated, then shares are 3.34, 3.33, 3.33 and total 10.00.
+3. Given USD 0.05 split 50/50 between IDs A and B, when allocated, then shares are 0.03 and 0.02 under the floor/residual rule.
+4. Given zero/negative/malformed amount, more than two amount decimals, invalid date, blank/overlength description, or percentages not exactly totaling 100.00%, when submitted, then reject with a field-specific message and no posting.
+5. Given no receipt or a valid JPEG/PNG up to 5 MiB, when submitted, then accept; reject unsupported/oversized/mismatched-content files.
 
-**Acceptance Scenarios**:
-1. **Given** a registered account holder and an unauthenticated session, **When** the
-	 person requests their expense or balance information, **Then** access is denied.
-2. **Given** an account holder who has authenticated, **When** they access their account,
-	 **Then** their own expense and balance information is available.
-3. **Given** a person setting up an account, **When** they register and sign in, **Then**
-	 email/password sign-in, email verification, and password recovery are supported (D10).
-4. **Given** an account holder, **When** they create a group, **Then** the group is
-	 available for organizing shared expenses; membership permissions follow Q2.
+### User Story 3 — Notification and review (P1)
+**Scenario**: Submission creates notices; a different manager approves before financial posting.
+**Independent test**: Check recipients, persistent read state, review transitions, and one posting per operation ID.
 
-### User Story 2 - Submit a shared expense (Priority: P1)
-A group member records an expense with its amount, date, description, payer, participants,
-and equal or percentage allocation, with an optional receipt image.
+1. Given a group expense submitted by A, when submission succeeds, then every other current member receives one unread notice atomically with the pending expense.
+2. Given a pending/rejected expense, when balances are read, then it has no financial effect.
+3. Given the creator attempting self-approval, when approval is requested, then reject. Without another manager the expense stays pending.
+4. Given another manager's valid approval, when the same operation is submitted twice, then post once.
+5. Given an approved expense needing correction, when another manager approves its reversal, then undo its ledger entries once, preserve the original, and require ordinary approval for any replacement expense.
 
-**Why this priority**: Expense capture is the source of shared obligations and balances.
+### User Story 4 — Balances and payments (P1)
+**Scenario**: A debtor records an actual external payment and the recipient confirms it.
+**Independent test**: Reconcile pairwise balances from the approved ledger, confirmed payments, and reversals.
 
-**Independent Test**: Submit one equal-split expense and one percentage-split expense;
-verify the recorded details, payer, participants, and calculated allocations against D1-D5.
+1. Given A owes B USD 20.00, when A records USD 5.00, then balance stays 20.00 until B confirms; after confirmation it is 15.00.
+2. Given debt 20.00, when a payment of 25.00 is submitted, then reject. Recheck at confirmation if intervening activity reduces the debt.
+3. Given a duplicate confirmation operation ID, when retried, then the financial effect occurs once.
+4. Given a confirmed payment reversal requested by one party, when the other has not confirmed, then do not reverse; after both confirm, reverse once and retain history.
 
-**Acceptance Scenarios**:
-1. **Given** a group with current members, **When** a member submits an expense with one
-	 payer and selected participants, **Then** the expense retains its required details and
-	 has no balance effect before approval.
-2. **Given** a USD 10.00 expense split equally among three participants in stable order
-	 A, B, C, **When** it is allocated, **Then** the shares are USD 3.34, USD 3.33, and
-	 USD 3.33, and total USD 10.00 (AC-D3).
-3. **Given** a USD 10.00 expense split 60/40, **When** it is allocated, **Then** the
-	 shares are USD 6.00 and USD 4.00; totals other than 100% are rejected (AC-D5).
-4. **Given** an expense with a zero, negative, or malformed amount, **When** it is
-	 submitted, **Then** it is rejected and creates no posted financial effect (AC-D4).
-5. **Given** an expense with no receipt or an allowed receipt image, **When** it is
-	 submitted, **Then** the expense can be recorded; image limits and access follow Q10.
+### User Story 5 — Reports (P2)
+**Scenario**: A user views authorized summaries, filters dates, and exports CSV.
+**Independent test**: Compare report entries/totals with authorized source records at the stated dates and statuses.
 
-### User Story 3 - Review expenses and receive notifications (Priority: P1)
-A group member submits an expense, applicable members receive an in-app notification, and
-a group manager approves it before it changes balances.
+1. Given inclusive start/end date filters, when expenses are reported, then include records whose entered calendar date is within both boundaries.
+2. Given payment filters, when reporting confirmed payments, then use the confirmation date in UTC.
+3. Given pending/rejected records, when financial totals are calculated, then exclude them; optional separate status displays must not change totals.
+4. Given current balances, when displayed or exported, then label them current rather than as-of the report date range.
 
-**Why this priority**: Review-before-posting is an explicit customer capability and
-prevents unapproved expenses from changing what users owe.
+### User Story 6 — Delivery platforms (P1 full product)
+**Scenario**: Use the desktop lab MVP now as the planned first increment; retain primary web and Android/iOS delivery for subsequent increments.
+**Independent test**: Verify the same core workflows on the D22 matrix when each platform is implemented. Documentation approval does not pass platform execution tests.
 
-**Independent Test**: Submit an expense, verify its in-app notification and zero balance
-effect, approve it once as a group manager, and verify one posting.
+1. Given a Swing implementation, when assessing full customer platform compliance, then it cannot by itself satisfy web, Android, or iOS requirements.
+2. Given later web/mobile builds, when platform acceptance runs, then verify all core functional capabilities on the D22 supported matrix.
 
-**Acceptance Scenarios**:
-1. **Given** a submitted expense, **When** submission completes, **Then** an in-app
-	 expense notification is triggered (AC-D7); exact recipients remain open (Q7).
-2. **Given** a submitted expense not yet approved, **When** a user views balances,
-	 **Then** the expense has no balance effect.
-3. **Given** a submitted expense, **When** a group manager approves it, **Then** its
-	 financial effect is posted once; another approval does not post it again (AC-D8).
-4. **Given** a reviewer rejects or edits an expense, **When** the workflow continues,
-	 **Then** its behavior follows the decisions still open in Q8.
+### Edge cases
+- Allocation residual cents, exact percentage totals, empty/malformed fields, and unsupported receipts: D13–D15/D20.
+- Membership removal with debts/pending records and former-member history: D12/D16.
+- Self-approval, no eligible manager, rejection, edits, cancellation, resubmission, and approved reversals: D18.
+- Duplicate submission/delivery/confirmation, concurrent debt changes, partial payments, overpayment, and reversals: D17/D19.
+- Expired/reused verification or reset links and attempts to access unrelated groups: D16.
 
-### User Story 4 - Track balances and settlements (Priority: P1)
-Users inspect the amount owed between each pair and record payments made to settle those
-amounts.
+## Requirements
 
-**Why this priority**: Accurate balances and payments are the central outcome of expense
-sharing.
+### Functional requirements and source inventory
+Every row retains a customer capability. The decision column traces clarified behavior to approved lab decisions; it does not rewrite the original request.
 
-**Independent Test**: Use a known approved expense ledger to verify pairwise debts, record
-a partial payment, and compare the resulting balance with the expected amount.
-
-**Acceptance Scenarios**:
-1. **Given** approved expenses and recorded payments, **When** a user views pairwise
-	 balances, **Then** each amount owed reflects those records and excludes pending or
-	 rejected expenses.
-2. **Given** A owes B USD 20.00, **When** A records a USD 5.00 payment to B, **Then**
-	 USD 15.00 remains owed (AC-D9).
-3. **Given** the same USD 20.00 debt, **When** A attempts to record a USD 25.00 payment,
-	 **Then** the overpayment is rejected (AC-D9).
-
-### User Story 5 - Review reports (Priority: P2)
-An account holder reviews summaries of expenses, balances, and payments and may use
-customized report filters if that optional capability is confirmed.
-
-**Why this priority**: Summaries help users understand shared spending and settlement
-status; custom reports remain tentative in the customer request.
-
-**Independent Test**: Compare a user's report with the authorized source expenses,
-balances, and payments for the same reporting scope.
-
-**Acceptance Scenarios**:
-1. **Given** authorized expense, balance, and payment records, **When** a user requests
-	 summaries, **Then** the summaries agree with those records.
-2. **Given** custom reporting is confirmed, **When** a user requests a report with
-	 confirmed filters, **Then** only records matching those filters are included.
-
-### User Story 6 - Use the product on requested platforms (Priority: P1)
-Users complete the agreed product workflows through the primary web product and the
-Android and iOS apps.
-
-**Why this priority**: The customer explicitly requests all three delivery platforms.
-
-**Independent Test**: Verify the agreed user workflows separately on web, Android, and
-iOS against the customer-approved browser and OS support matrix.
-
-**Acceptance Scenarios**:
-1. **Given** the agreed web support environment, **When** a user completes an agreed
-	 workflow, **Then** the primary web product supports it.
-2. **Given** supported Android and iOS environments, **When** users complete agreed
-	 mobile workflows, **Then** the corresponding app supports them.
-3. **Given** a Java Swing demonstration, **When** platform acceptance is assessed,
-	 **Then** the demonstration alone does not satisfy the web, Android, or iOS requirement.
-
-### Edge Cases
-- An expense has a zero, negative, or malformed amount; D4 requires rejection without a
-	posted financial effect.
-- A participant is not a current member of the expense group; reject that participant
-	selection under D2.
-- Equal splitting leaves residual cents; allocate by stable participant order, while the
-	ordering key remains open (D3, Q3).
-- Percentage inputs total less than or greater than 100%; reject them under D5. Fractional
-	cent handling remains open (Q5).
-- An expense is pending approval, rejected, approved twice, or resubmitted; pending and
-	rejected expenses do not affect balances, and approval posts once (D8, Q8).
-- A payment is partial or greater than the current pairwise debt; allow the partial payment
-	and reject the overpayment (D9). Duplicate and reversal rules remain open (Q9).
-- An expense has no receipt; receipt omission is allowed. Format, size, retention, and
-	access limits remain open (Q10).
-- An account requests another user's information or group data; enforce confirmed access
-	permissions, which remain incomplete (Q6).
-
-## Requirements *(mandatory)*
-
-### Functional Requirements
-
-All rows remain in the full customer feature inventory regardless of proposed MVP
-disposition. “MUST” formalizes a source capability or confirmed D1-D10 decision. It does
-not resolve linked open questions or approve the proposed MVP.
-
-| ID | Customer capability | Observable acceptance criterion | Open questions |
+| ID | Customer capability | Testable requirement / acceptance criterion | Confirmed decisions |
 |---|---|---|---|
-| FR-001 | Individual user accounts and login | Account access uses email and password; email verification and password recovery are supported. An account holder must authenticate before accessing their own expense and balance information; an unauthenticated person cannot access that information. Persistence protections and shared-data permissions remain open. | Q6 |
-| FR-002 | Create and manage groups | A user can create and manage groups and view group expenses and balances; group-management permissions and the effects of membership changes remain open. | Q2 |
-| FR-003 | Create an expense | A submitted expense retains its amount, date, description, split manner, selected participants, and exactly one payer. The payer may also be a participant. Reject zero, negative, or malformed amounts. | Q1, Q4 |
-| FR-004 | Equal splitting | For USD expenses with two decimal places, allocate equal shares among selected participants and distribute any remaining cents in stable participant order; shares must total the expense amount. The stable ordering key remains open. | Q1, Q3 |
-| FR-005 | Percentage splitting | Reject percentage inputs that do not total 100%. For valid inputs, allocations must total the USD expense amount and follow the entered percentages; precision and fractional-cent rounding remain open. | Q3, Q5 |
-| FR-006 | Optional receipt image | An expense can be submitted without a receipt or with an allowed receipt image. Supported formats, size limits, retention, and access rules remain open. | Q10 |
-| FR-007 | Select involved users | The creator can select expense participants only from current members of the expense group. The payer may be a participant (D1); creator/payer identity restrictions remain open (Q1). | Q1, Q2 |
-| FR-008 | New-expense notifications | Submitting an expense triggers an in-app notification. Exact recipients and delivery, retry, and read behavior remain open. | Q7 |
-| FR-009 | Review and approve before balance adjustment | A group manager must approve a submitted expense once before it affects balances. Approval posts its financial effect exactly once; rejection, edits, resubmission, and self-approval rules remain open. | Q8 |
-| FR-010 | Pairwise balance tracking | Each user's amount owed to each other user reflects approved expenses and recorded pairwise settlements. Submitted or rejected expenses have no balance effect; an approved expense is posted once. | Q1, Q3, Q8, Q9 |
-| FR-011 | Record settlement payments | Users can record pairwise payments, including partial payments. Reject a payment greater than the recorded debt; confirmation, reversal, and duplicate-submission rules remain open. | Q9 |
-| FR-012 | Reports and summaries | Users can obtain expense, balance, and payment summaries consistent with the records they are authorized to access. Access boundaries and report treatment of pending items remain open. | Q6, Q11 |
-| FR-013 | Possible custom reports | Candidate scope: custom reports with date ranges and other parameters. This capability remains tentative because the source says “possibly”; filters, boundaries, and inclusion rules await confirmation. | Q11 |
-| FR-014 | Primarily web-based product | Users can complete the agreed product scenarios through the primary web product. Browser support and feature parity remain open. | Q12 |
-| FR-015 | Android app | The product includes an Android app for the confirmed mobile feature set. Supported OS versions and feature parity remain open. | Q12 |
-| FR-016 | iOS app | The product includes an iOS app for the confirmed mobile feature set. Supported OS versions and feature parity remain open. | Q12 |
+| FR-001 | User accounts and login | Email/password login, verified email before account access, and password recovery. Verification/reset links are single use and expire after 30 minutes; reset responses do not reveal whether an email exists. Enforce D16 access boundaries. | D6, D10, D16 |
+| FR-002 | Group management | Authenticated users create groups and become managers. Managers manage registered membership and additional managers. Removal requires zero group balances and no pending expense/payment involving the member; preserve history. Direct individual sharing uses a private two-person group with both users as managers. | D2, D12 |
+| FR-003 | Expense creation | Store positive USD amount with at most two decimal places, valid YYYY-MM-DD calendar date, nonblank description up to 500 characters, split manner, one payer, and selected participants. Creator/payer may differ; both are current group members. Reject invalid fields without posting. | D1, D4, D11, D14 |
+| FR-004 | Equal split | Divide the amount equally using BigDecimal, round each share down to whole cents, then assign residual cents one at a time by ascending immutable user ID until the shares equal the total. USD only. | D3, D13 |
+| FR-005 | Percentage split | Each selected participant has a percentage greater than zero and at most 100, with at most two decimal places. The exact sum is 100.00%; otherwise reject without normalization. Floor each exact share to cents and distribute residual cents by D13. | D5, D13, D15 |
+| FR-006 | Optional receipt image | Allow no receipt or one JPEG/PNG image of at most 5 MiB. Validate actual content and extension. Restrict access to associated expense/group permissions and retain history for the account/group lifetime in the lab. | D20 |
+| FR-007 | Involved users | Require selected expense participants to be current group members. Explicitly select the single payer, who is a current member and may be included in or excluded from participants. Creator and payer may differ. | D1, D2, D11 |
+| FR-008 | Notifications | On submission, atomically persist pending expense and unread in-app notifications for every other current group member. Repeated delivery with the same notification ID creates no duplicate; read state persists. No email/push requirement for the lab. | D7, D17 |
+| FR-009 | Approval workflow | Require one manager other than the creator to approve before posting, exactly once. Without an eligible reviewer, remain pending. Creator may edit/cancel pending expenses or revise/resubmit rejected expenses. Approved expenses require another-manager-reviewed reversal and replacement, with history retained. | D8, D14, D18 |
+| FR-010 | Pairwise balances | Calculate each pairwise debt from approved expense allocations, confirmed payments, and confirmed reversals. Pending/rejected/canceled items do not post. Posting/reversal conserves value and each operation ID has one financial effect. Preserve historical records. | D3, D8, D13, D18, D19 |
+| FR-011 | Settlement payment records | Debtor records a positive pairwise payment; recipient confirms before posting. Permit partial payment, check against debt at submission and confirmation, and reject overpayment. Recorder can cancel pending payment. Confirmed payment reversal requires both parties. Repeated operation IDs do not double-post. Recording does not transfer funds. | D9, D19 |
+| FR-012 | Reporting and summaries | Summarize authorized expenses, current balances, and payments. Financial totals include approved expenses and confirmed payments; pending/rejected items may be separately displayed by status and never enter financial totals. Label balances as current, not historical as-of values. | D16, D21 |
+| FR-013 | Custom reports (tentative in original request) | Confirmed lab subset: inclusive optional start/end calendar-date filters and CSV export. Expense filtering uses entered expense date; confirmed-payment filtering uses confirmation date in UTC. Defer arbitrary report builders while retaining them in the full feature inventory. | D21 |
+| FR-014 | Primarily web-based product | Retain primary web delivery for the later full product, with the same core functional capabilities as the desktop MVP and latest two stable Chrome/Edge/Firefox/Safari versions at release acceptance. Swing alone does not fulfill this platform requirement. | D22 |
+| FR-015 | Android application | Retain Android delivery for a later increment with the same core functional capabilities and Android 12+ support. Verify on the agreed supported matrix before claiming delivery. | D22 |
+| FR-016 | iOS application | Retain iOS delivery for a later increment with the same core functional capabilities and iOS 17+ support. Verify on the agreed supported matrix before claiming delivery. | D22 |
 
-### Non-Functional Requirements
-
-These lab engineering constraints are not original customer requirements.
-
-| ID | Origin | Requirement and verification |
+### Non-functional requirements
+| ID | Origin | Requirement / verification |
 |---|---|---|
-| NFR-001 | Lab engineering | Use Java 21 and Maven; verify the declared Java release and dependency versions and run the documented Maven build with JDK 21. |
-| NFR-002 | Lab engineering | Keep Swing presentation separate from business rules; verify business-rule tests can run without starting the GUI. |
-| NFR-003 | Lab engineering | Use BigDecimal for monetary arithmetic; verify confirmed allocation and ledger invariants with JUnit 5 without assuming unresolved rounding rules. |
-| NFR-004 | Lab engineering | Maintain requirement-to-design/test traceability and use reviewed, requirement-linked PlantUML diagrams when design diagrams are created. |
-| NFR-005 | Derived, pending confirmation | Enforce account ownership and confirmed group permissions; verify allowed and denied access cases. Data persistence protections and shared-data permissions remain open (Q6). |
-| NFR-006 | Customer quality targets unspecified | Performance, capacity, accessibility, availability, retention, recovery, and browser/OS targets remain open (Q12-Q13); no numeric customer target is invented. |
-| NFR-007 | Lab engineering | Record a human reviewer's identity, date, findings, and disposition before AI-generated project artifacts are accepted. |
+| NFR-001 | Lab engineering | Java 21 and Maven, declared release/dependency versions; verify the future Maven build under JDK 21. |
+| NFR-002 | Lab engineering | Swing presentation delegates to business logic without Swing dependencies; future business tests run without GUI startup. |
+| NFR-003 | Lab engineering / D13 | BigDecimal for money/percentages; test floor/residual allocation, conservation, approval exclusion, and exactly-one financial effect using JUnit 5. |
+| NFR-004 | Lab engineering | Stable requirement IDs and design/test traceability; reviewed, requirement-linked PlantUML diagrams when design starts. |
+| NFR-005 | D16 | Salted password hashes, secure transport for web/mobile, persistent authorized records, no sensitive credentials in logs/source; verify allowed/denied access and link expiry/reuse cases. |
+| NFR-006 | D23 | On an 8 GB RAM reference machine with 100 users, 10 groups, 10,000 expenses, 95% of local submission/balance/report operations finish within 2 seconds over 100 representative requests per operation. Keyboard-reachable controls, accessible labels, and non-color-only errors. Daily backup, demonstrated restore, RPO ≤24 hours and RTO ≤1 hour. Desktop has no hosted SLA; later web target is 99.5% monthly availability. These are acceptance targets, not results. |
+| NFR-007 | Lab engineering | Record actual human review identity, date, findings, and disposition; maintain distinction between documentation approval and software acceptance. |
 
-### Proposed Java Swing MVP *(implementation decision; not customer-approved scope)*
+### Approved Java Swing MVP and retained full-product scope (D22)
+The approved lab MVP includes FR-001–FR-012 plus the date-filter/CSV subset of FR-013: real accounts, groups/private pairs, both split methods, optional receipts, in-app notifications, review/reversals, pairwise balances, confirmed settlements, and reports. Arbitrary custom report builders remain in the inventory for later consideration.
 
-Candidate inclusion: account access (FR-001), basic groups (FR-002), expense fields and
-both split methods (FR-003-FR-005), participant selection (FR-007), review (FR-009),
-pairwise balances (FR-010), payment recording (FR-011), and basic summaries (FR-012).
+Desktop matrix: Windows 11, macOS 14+, Ubuntu 24.04 LTS with Java 21. Primary web, Android, and iOS remain full-product requirements for later increments, with core functional parity. Web supports the latest two stable Chrome/Edge/Firefox/Safari releases at acceptance; Android supports 12+ and iOS 17+. These are approved scope/support targets, not implemented or verified builds.
 
-Proposed deferral: receipt images (FR-006), notifications (FR-008), optional custom
-reports (FR-013), web (FR-014), Android (FR-015), and iOS (FR-016). These remain customer
-inventory items and are not deleted or waived. Neither this MVP boundary nor its deferrals
-are customer-approved. A Swing demonstration does not fulfill the web and mobile platform
-requirements. Mock login, local-only persistence, additional approval rules, or unresolved monetary
-behavior are not approved defaults. The authentication method is confirmed by D10.
+### Key entities
+Account; group/private pair and membership/manager roles; expense with one payer and participant allocations; optional receipt; approval/rejection/revision/reversal record; persistent in-app notification/read state; external-payment record and recipient confirmation; immutable operation ID; authorized report/CSV. Preserve original ledger and history when reversing records.
 
-### Key Entities
-- **Account**: a person's authenticated identity and access to their own information.
-- **Group**: a set of people organizing shared expenses, with membership and management
-	rules still subject to Q2.
-- **Expense**: amount, date, description, split manner, optional receipt, one payer,
-	participants, and review state.
-- **Allocation**: an expense share assigned to a participant, including its amount or
-	percentage and the applicable confirmed split rule.
-- **Approval**: a group manager's review action and its effect on whether the expense is
-	posted to balances; unresolved transitions are listed in Q8.
-- **Notification**: an in-app notice triggered by expense submission, with recipients and
-	delivery details subject to Q7.
-- **Payment**: a pairwise settlement record between users, including amount and its effect
-	on the debt; remaining rules are listed in Q9.
-- **Report**: a summary of authorized expense, balance, and payment information, with
-	optional custom filters subject to Q11.
+## Success criteria
+- **SC-001**: Preserve all FR-001–FR-016 customer capabilities with approved decision traceability; original customer wording remains unchanged.
+- **SC-002**: Every allocation test totals the exact expense amount at USD 0.01 precision and repeats deterministically for the same immutable participant IDs.
+- **SC-003**: Unapproved/rejected/canceled expenses produce zero postings; valid approvals and approved reversals post once per operation ID.
+- **SC-004**: Pairwise balances reconcile to confirmed ledger/payment history, including partial settlement, overpayment rejection, and both-party-approved reversals.
+- **SC-005**: Reports/CSV match authorized records, inclusive date boundaries, UTC payment confirmation dates, and approved/confirmed financial totals.
+- **SC-006**: Evaluate each implemented platform against D22; desktop alone cannot pass the retained full-product platform scope.
+- **SC-007**: Execute D23 performance/accessibility/backup tests before claiming implementation acceptance. No implementation test results are claimed in this lab.
 
-## Success Criteria *(mandatory)*
+## Assumptions and limits
+USD-only, single-payer, membership, authentication, notification, review, settlement, receipts, reports, and support/quality rules are explicit decisions D1–D23, not silent assumptions. The original custom-report request was tentative; the user subsequently approved date filters and CSV under D21. Negative-refund entry is outside the lab MVP; reviewed correction/reversal is supported. Production retention policy, detailed security implementation, and future arbitrary-report design are later engineering/product work, not unresolved lab questions. No Java implementation is generated here.
 
-### Measurable Outcomes
-- **SC-001**: All 16 customer capabilities, FR-001 through FR-016, retain an explicit
-	acceptance criterion and a recorded status before any customer-compliance claim.
-- **SC-002**: Every approved expense allocation in confirmed-rule test cases sums exactly
-	to the expense total at USD 0.01 precision; unresolved percentage rounding cases remain
-	blocked pending Q3/Q5.
-- **SC-003**: In all approval workflow acceptance cases, pending and rejected expenses
-	change balances zero times, and an approved expense changes balances exactly once.
-- **SC-004**: In all settlement acceptance cases, pairwise balances equal the expected
-	amount after partial payment and reject payment above the debt.
-- **SC-005**: In all report acceptance cases, expense, balance, and payment summaries
-	match the authorized source records in the same scope.
-- **SC-006**: Web, Android, and iOS are each verified against their confirmed support
-	matrix before any claim that the requested platform scope is met.
-- **SC-007**: Human review records workflow completion and findings for representative
-	account, expense, approval, settlement, and reporting scenarios; the customer has not
-	specified a numeric satisfaction target.
+## Question resolution inventory
+All recorded lab questions are resolved for this documentation baseline. Preserve the IDs for traceability.
 
-## Assumptions
-- USD and two decimal places apply to lab expense and payment examples because D3
-	explicitly confirmed them; no additional currencies are assumed.
-- One payer, group-member participants, email/password sign-in with email verification and
-  password recovery, an in-app submission notification,
-	one group-manager approval, pairwise settlement, partial payments, and rejection of
-	overpayments apply only as confirmed in D1-D10.
-- The customer-requested platform list remains web, Android, and iOS. The Java Swing MVP
-	is a lab proposal and is not assumed to be an accepted substitute.
-- Custom reporting remains tentative because the customer said “possibly”; it is not
-	silently converted into a committed release requirement.
-- Unanswered behaviors remain open rather than receiving industry-standard defaults where
-	those defaults would decide money, permissions, approval, or customer scope.
-
-## Open Questions
-
-Confirmed answers D1-D10 are recorded in [clarification-decisions.md](clarification-decisions.md).
-The questions below retain the original stable IDs and list only details not settled by
-those decisions.
-
-| ID | Remaining question | Affected requirements |
+| Question | Resolution | Affected requirements |
 |---|---|---|
-| Q1 | May the expense creator differ from the payer, and are any restrictions on that relationship required? | FR-003, FR-007, FR-010 |
-| Q2 | Who may create groups or add/remove members? What happens to prior debts after membership changes? Are direct non-group expenses supported? | FR-002, FR-007, FR-010 |
-| Q3 | What stable participant ordering key applies to residual cents? What rounding mode applies to fractional-cent percentage allocations? Are cross-currency expenses supported beyond confirmed USD examples? | FR-003-FR-005, FR-010-FR-011 |
-| Q4 | How should missing, excessive, or malformed dates and descriptions be handled? Are refunds supported? | FR-003 |
-| Q5 | What percentage precision or tolerance is accepted, and how are fractional-cent shares rounded while preserving the total? | FR-005 |
-| Q6 | What data persistence protections and shared-data permissions are required? | FR-001-FR-002, FR-012 |
-| Q7 | Which members receive in-app notifications, and what delivery, retry, and read behavior is required? | FR-008 |
-| Q8 | Can a creator approve their own expense? What happens on rejection, edits, cancellation, or resubmission? | FR-009-FR-010 |
-| Q9 | Who confirms payments, and what are the reversal and duplicate-submission rules? Payment transfer is not specified by the customer. | FR-010-FR-011 |
-| Q10 | Which receipt image types and sizes, storage duration, and access permissions are required? | FR-006 |
-| Q11 | Are custom reports required? Which filters, date boundaries/time zone, exports, and pending/approved expense treatment apply? | FR-012-FR-013 |
-| Q12 | What web/mobile feature parity and browser/OS versions are required? Is the proposed Swing MVP and deferral list approved? | FR-014-FR-016, MVP |
-| Q13 | What measurable performance, capacity, accessibility, availability, retention, backup, and recovery targets apply? | NFR-006 |
+| Q1: creator / payer | D1, D11 | FR-003, FR-007, FR-010 |
+| Q2: membership / individual sharing | D2, D12 | FR-002, FR-007, FR-010 |
+| Q3: currency / rounding | D3, D13 | FR-003–FR-005, FR-010–FR-011 |
+| Q4: invalid input / corrections | D4, D14 | FR-003, FR-009 |
+| Q5: percentage precision / totals | D5, D13, D15 | FR-005 |
+| Q6: authentication / access | D6, D10, D16 | FR-001–FR-002, FR-012 |
+| Q7: notification behavior | D7, D17 | FR-008 |
+| Q8: approval / edits / reversal | D8, D14, D18 | FR-009–FR-010 |
+| Q9: settlement confirmation / reversal / duplication | D9, D19 | FR-010–FR-011 |
+| Q10: receipt limits / access / retention | D20 | FR-006 |
+| Q11: report scope / dates / exports | D21 | FR-012–FR-013 |
+| Q12: MVP / platform scope | D22 | FR-001–FR-016 |
+| Q13: measurable quality targets | D23 | NFR-006 |
 
-## Decision Log and Readiness
+## Decision log and review
+D1–D23 are confirmed in clarification-decisions.md. The user of this chat explicitly approved D11–D23 and confirmed review/approval of the constitution, specification, and checklist subject to incorporating them, on 2026-10-29. Those changes are now incorporated. Review findings addressed: creator/payer ambiguity, monetary rounding, membership, self-approval and workflow transitions, settlement confirmation/reversal, receipt/report scope, MVP/platform distinction, and measurable quality targets. Disposition: approved lab documentation baseline. No claim of software implementation or course submission.
 
-The user confirmed D1-D10 on 2026-10-29, as recorded in clarification-decisions.md.
-Those decisions supersede unanswered portions of Q1-Q9 only as explicitly stated.
-Remaining details require confirmation. The MVP deferral list remains unapproved, and
-this draft remains subject to human review. `UserRequirement.md` remains unchanged.
+## Acceptance-case inventory
 
-### Acceptance Cases for Confirmed Decisions
-- **AC-D1 (FR-003/007/010)**: An expense has exactly one recorded payer. That payer may
-	also occur in the participant list. Multiple payers are outside the confirmed lab rule.
-- **AC-D2 (FR-007)**: Reject selection of a user who is not a current member of the
-	expense group.
-- **AC-D3 (FR-004)**: Given USD 10.00 and three equal participants whose confirmed stable
-	order is A, B, C, allocate 3.34, 3.33, and 3.33. Shares total 10.00. The ordering key
-	still needs definition.
-- **AC-D4 (FR-003)**: Reject 0, negative, and malformed expense amounts; do not create a
-	posted financial effect.
-- **AC-D5 (FR-005)**: For USD 10.00 and valid percentages 60/40, allocate 6.00/4.00.
-	Reject totals of 90% or 110%. Percentage precision and fractional rounding remain open.
-- **AC-D6 (FR-001)**: Account holders must authenticate through real login before
-	accessing their own information. Mock identity selection does not meet D6. Authentication and recovery
-	follow D10; persistence protections and shared-data permissions remain open.
-- **AC-D7 (FR-008)**: Submission triggers an in-app expense notification. Exact recipients
-	and delivery details still require confirmation.
-- **AC-D8 (FR-009/010)**: A submitted expense has no balance effect until one group-manager
-	approval. Approval posts the expense once; additional approval levels are not required
-	by D8.
-- **AC-D9 (FR-011)**: Given A owes B USD 20.00, recording A's USD 5.00 payment to B leaves
-	USD 15.00 owed. Reject a USD 25.00 payment against that original USD 20.00 debt.
-	Confirmation, reversals, and duplicate detection remain open.
-- **AC-D10 (FR-001)**: Account access uses email and password; email verification and
-	password recovery are supported. Data persistence protections and shared-data permissions
-	remain open under Q6.
+- **AC-D1**: Exactly one payer; the payer may also be a participant. Multiple payers are rejected.
+
+- **AC-D2**: A participant outside the current group is rejected; current members may be selected.
+
+- **AC-D3**: USD 10.00 split equally among ascending IDs A/B/C yields 3.34/3.33/3.33.
+
+- **AC-D4**: Reject zero, negative, and malformed amounts without financial posting.
+
+- **AC-D5**: USD 10.00 split 60/40 yields 6.00/4.00; reject totals of 90% and 110%.
+
+- **AC-D6**: Unauthenticated access and mock identity selection cannot access account information; use real login under D10/D16.
+
+- **AC-D7**: Submission triggers unread in-app notifications under D17.
+
+- **AC-D8**: No posting before one eligible other-manager approval; retrying the same approval operation posts once.
+
+- **AC-D9**: A owes B 20.00; a recorded 5.00 payment leaves 20.00 pending and 15.00 after B confirms. Reject 25.00 against the original 20.00 debt.
+
+- **AC-D10**: Exercise email/password sign-in, email verification, and password recovery under D16.
+
+- **AC-D11**: A creates an expense funded by B for participants A/C; B has no participant share and is recorded as the single payer.
+
+- **AC-D12**: A manager cannot remove a member with nonzero group balances or pending items. After eligibility, removal preserves historical records. A private pair has both users as managers.
+
+- **AC-D13**: USD 0.05 split 50/50 with ascending IDs A/B yields 0.03/0.02; repeated allocation is identical. Reject 0.001 USD.
+
+- **AC-D14**: Reject blank/501-character descriptions, invalid dates, and missing required fields; accept valid future dates. Correct approved expenses by reviewed reversal and approved replacement, never overwrite.
+
+- **AC-D15**: Reject zero/negative participant percentages, more than two decimal places, or an exact sum other than 100.00; do not normalize.
+
+- **AC-D16**: Reject expired or reused 30-minute links and unverified account access. Unknown/known reset requests receive the same generic response. Deny unrelated-group access; preserve authorized own-history access.
+
+- **AC-D17**: One notification per other current member; duplicate notification ID produces no duplicate; marking read survives reopening. A failed atomic submission leaves neither expense nor notice records.
+
+- **AC-D18**: Reject self-approval; no eligible manager means pending. Pending edits/rejected resubmissions require approval; approved reversal posts inverse entries once and retains history.
+
+- **AC-D19**: Recipient confirmation is required to post a payment; recheck current debt at confirmation. One-party reversal approval does not reverse a confirmed payment; both-party approval reverses once. Duplicate operation IDs have one effect.
+
+- **AC-D20**: Accept one valid JPEG/PNG of exactly 5 MiB and no-receipt submission; reject larger or mismatched-content files and unauthorized access.
+
+- **AC-D21**: Include both expense date endpoints, filter payments by UTC confirmation date, exclude pending/rejected records from financial totals, label balances current, and verify CSV matches displayed authorized records.
+
+- **AC-D22**: Apply D22 desktop matrix to a future Swing MVP, and retain web/Android/iOS core-parity acceptance separately. Do not report desktop acceptance as mobile/web completion.
+
+- **AC-D23**: Measure D23 workload/latency, keyboard/label/error accessibility, daily backup and timed restore. Record measured results when implemented; no benchmark or availability pass is asserted by this document.
