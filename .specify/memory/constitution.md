@@ -49,11 +49,11 @@ disposition, open questions, and a dated decision log. Trace design elements and
 tests to the requirements they address. Preserve all customer capabilities in the
 requirements inventory, including capabilities deferred from a lab MVP.
 
-### X. Human Review of AI Output
-AI-generated requirements, decisions, diagrams, tests, and code MUST receive human review
+### X. Human Review of Generated Output
+Generated requirements, decisions, diagrams, tests, and code MUST receive human review
 before acceptance. Reviewers MUST check for omissions, invented behavior, contradictions,
 and scope drift. A review is complete only when an actual reviewer and review date are
-recorded; AI output is not customer confirmation.
+recorded; Generated output is not customer confirmation.
 
 ## Customer Requirements and Implementation Decisions
 `UserRequirement.md` is the unchanged authoritative customer request and MUST NOT be
@@ -64,7 +64,7 @@ remain distinct from lab constraints, proposed implementation choices, and confi
 customer decisions. The Java 21, Maven, Java Swing, JUnit 5, and PlantUML choices in this
 constitution are engineering decisions for the lab, not original customer requirements.
 The Swing lab MVP does not fulfill or replace the customer's requested platforms. Open
-questions remain unresolved until confirmed; no implementation choice or AI output may be
+questions remain unresolved until confirmed; no implementation choice or Generated output may be
 presented as customer confirmation.
 
 ## Development Workflow and Quality Gates
@@ -82,11 +82,12 @@ added principles or materially expanded guidance, and PATCH for clarifications a
 non-semantic refinements. Reviewers MUST verify compliance with this constitution during
 specification, design, implementation, and release reviews.
 
-**Version**: 1.2.0 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-10-29
+**Version**: 1.2.1 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-10-29
 
 
 Review record: the user of this chat explicitly stated “I reviewed and approve them”
 on 2026-10-29 for the constitution, specification, and checklist, subject to
 incorporating approved decisions D11–D23. Those decisions are now incorporated.
-Version 1.2.0 records this ratification and expanded confirmed decision baseline.
+Version 1.2.0 records ratification and the confirmed decision baseline. Version 1.2.1
+clarifies the generated-output review wording without changing its required human review.
 Documentation approval does not assert implementation, executed tests, or platform delivery.
