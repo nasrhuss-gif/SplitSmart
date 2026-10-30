@@ -7,7 +7,7 @@ Download [SplitSmart-SpecKit.zip](SplitSmart-SpecKit.zip) and extract it into a 
 
 ## Documents
 - [Confirmed clarification decisions](specs/001-splitsmart/clarification-decisions.md)
-- [Final AI-assisted document review and remaining steps](REVIEW.md)
+- [Final document review and submission status](REVIEW.md)
 - [Original customer request](UserRequirement.md)
 - [Project constitution](.specify/memory/constitution.md)
 - [Approved feature specification and question resolutions](specs/001-splitsmart/spec.md)
@@ -23,7 +23,7 @@ The approved Java Swing lab MVP includes accounts, groups/private pairs, both sp
 Only course submission remains: paste that URL into the Lab 6 assignment. The course submission page has not been supplied.
 
 ## Environment check on 2026-10-29
-The execution terminal reported Python 3.9.6 through `python3`; `python` and `py` were unavailable. Git 2.50.1 is available. `uv`, `specify`, `code`, and `gh` were initially absent from PATH. These checks were initially run in the Codex execution terminal, then repeated through Copilot terminal tools in VS Code 1.144.0: `python` and `py` were unavailable, `python3` reported 3.9.6, project-local `uv` reported 0.13.6, and `specify --help` displayed successfully.
+The execution terminal reported Python 3.9.6 through `python3`; `python` and `py` were unavailable. Git 2.50.1 is available. `uv`, `specify`, `code`, and `gh` were initially absent from PATH. These checks were initially run in the project execution terminal, then repeated through Copilot terminal tools in VS Code 1.144.0: `python` and `py` were unavailable, `python3` reported 3.9.6, project-local `uv` reported 0.13.6, and `specify --help` displayed successfully.
 
 A workspace-local uv 0.13.6 and managed Python 3.11.18 were installed outside this deliverable under `work/`. Spec Kit 1.2.5 required a compatible binary dependency here: `uv tool install specify-cli --with 'cryptography<46'` installed cryptography 45.0.7 after the default dependency attempted an unavailable Rust build. This is an environment workaround, not a customer requirement or application dependency.
 
@@ -55,7 +55,7 @@ Read UserRequirement.md as the original SplitSmart customer request.
 Create principles for Java 21, Maven, Java Swing, JUnit 5,
 PlantUML, object-oriented design, separation of GUI and business
 logic, BigDecimal for money, requirement traceability, and
-human review of AI output. Do not change UserRequirement.md.
+human review of generated output. Do not change UserRequirement.md.
 Distinguish customer requirements from implementation decisions.
 ```
 
