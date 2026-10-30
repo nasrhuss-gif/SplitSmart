@@ -1,40 +1,34 @@
-# Lab 6 document review
+# SplitSmart Lab 6 final review
 
-Date: 2026-10-29
-Reviewer: Codex, AI-assisted document review. This is not human approval or customer confirmation.
+**Date**: 2026-10-29
+**AI reviewer**: Codex, after Copilot Agent revisions
+**Human reviewer**: the user of this chat
+**Disposition**: approved documentation baseline; D1–D23 incorporated.
 
-## Scope and results
-Reviewed UserRequirement.md, .specify/memory/constitution.md, specs/001-splitsmart/spec.md, and specs/001-splitsmart/checklists/requirements.md against the supplied lab instructions.
+## Human review evidence
+The user explicitly answered “Approve D11–D23” to the complete proposed policy set and “I reviewed and approve them” after being asked about the constitution, specification, and checklist subject to incorporating those decisions. These approvals were given in this chat on 2026-10-29. The confirmed policies are integrated into the final documents. This records the user's stated review; the AI does not impersonate the reviewer.
 
-1. All original customer capabilities remain in the feature inventory, including optional receipts, notifications, approval, payments, reporting, and web/Android/iOS support.
-2. FR-001 through FR-016 are unique and sequential. Actors, scenarios, acceptance criteria, non-functional requirements, and Q1 through Q13 are present.
-3. The constitution addresses Java 21, Maven, Swing, JUnit 5, PlantUML, object-oriented design, GUI/business separation, BigDecimal, traceability, and human review. These are identified as lab engineering choices.
-4. The Swing MVP is clearly proposed and does not replace customer platform requirements. Approval precedes balance posting; allocations must conserve the expense amount.
-5. The source request matches the original local committed UserRequirement.md byte for byte. No Java code was generated.
-6. The complete initialized project archive passed ZIP integrity validation; its 34 source files matched the current local project when checked before this report was added.
-7. The public GitHub repository is named SplitSmart. Core requirements documents are browsable; the full generated Spec Kit infrastructure is provided in SplitSmart-SpecKit.zip. Extract that archive before continuing the initialized project in VS Code.
+## Findings addressed
+1. Preserved the original customer request byte for byte and retained all FR-001–FR-016 capabilities, including web/Android/iOS and the originally tentative custom reporting request.
+2. Distinguished customer requirements, Java 21/Maven/Swing/JUnit 5/PlantUML engineering choices, confirmed lab decisions, and future platform increments.
+3. Resolved payer/creator roles, membership/private pairs, immutable-ID residual ordering, floor-to-cents allocation, invalid input, and exact percentage validation.
+4. Recorded email/password login, verification/recovery, access/persistence protections, atomic in-app notices, non-self approval, expense correction/reversal, recipient-confirmed settlement, both-party payment reversal, and duplicate operation handling.
+5. Specified receipt limits, inclusive date filtering, UTC payment confirmation dates, current-balance labeling, CSV scope, the full-function Swing MVP, retained later platforms, and measurable quality targets.
+6. Replaced stale pending/ambiguous statements with approved decisions and acceptance cases AC-D1–AC-D23.
+7. Restored explicit allocation/ledger conservation and corrected constitution ratification metadata; v1.2.0 now records the user's explicit approval.
+8. Q1–Q13 are resolved for this lab baseline. Later production retention policy, security implementation, and arbitrary-report design remain future work rather than silently invented implementation details.
 
-## Remaining work
-- Update: the user confirmed initial clarification decisions D1–D9 on 2026-10-29. Acceptance cases AC-D1–AC-D9 are now recorded. Remaining details are explicitly open in clarification-decisions.md.
-- Acceptance criteria that reference unresolved policies cannot be finalized until answers are confirmed. Record confirmed answers with date and approver, then revise the affected criteria.
-- The documents were created in Codex. The prescribed `/speckit-constitution` and `/speckit-specify` workflows completed in VS Code 1.144.0 Copilot Agent mode on the Mac. `/speckit-clarify` also ran and asked a follow-up login-method question. The user confirmed email/password with email verification and password recovery; D10 records this answer and Q6 retains only unresolved details.
-- A human still needs to review the documents. Do not mark customer clarification or human approval complete solely because this AI review exists.
+## Workflow evidence
+Spec Kit 1.2.5 initialized the Copilot integration. Initial drafts were authored in Codex, then `/speckit-constitution`, `/speckit-specify`, and `/speckit-clarify` ran in VS Code 1.144.0 Copilot Agent mode. User-confirmed D1–D10 were incorporated through this workflow; D11–D23 were subsequently approved and incorporated in Codex.
+
+Copilot terminal checks: python and py unavailable, python3 3.9.6, project-local uv 0.13.6, and specify --help available. The existing feature resolves with SPECIFY_FEATURE_DIRECTORY=specs/001-splitsmart. No new feature or branch was needed.
+
+## Validation and limits
+Document checks verify source preservation, sequential FR/decision IDs, acceptance-case coverage, resolved-question references, links, whitespace, and archive integrity. Allocation/settlement examples are checked against decimal arithmetic. No Java code, application execution, JUnit result, load benchmark, accessibility run, platform build, or deployment is claimed. Quality targets describe future acceptance tests.
 
 ## Submission
-The assignment's stated submission deliverable is the GitHub project URL:
+The assignment asks for the public GitHub project URL:
 
 https://github.com/nasrhuss-gif/SplitSmart
 
-Publication is complete. This report does not claim that the unresolved clarification and required editor workflow are complete.
-
-## Follow-up review after Copilot commands
-- Restored explicit allocation conservation, ledger conservation, and exclusion of unapproved expenses in constitution v1.1.1. These appeared in the original constitution and are preserved engineering invariants.
-- Corrected the constitution metadata to show human ratification pending; an AI-generated date does not establish human ratification.
-- Corrected the actor wording about creator/payer identity to say Q1 is unresolved, rather than imply a customer decision.
-- Confirmed that the 16 FR IDs and nine confirmed acceptance cases remain present after Copilot revisions.
-- Spec Kit's current prerequisite script uses SPECIFY_FEATURE_DIRECTORY=specs/001-splitsmart for explicit feature selection; a direct check with that setting resolved the existing feature successfully. No new feature or branch was created.
-
-Software checks were repeated through Copilot terminal tools in VS Code: python and py unavailable; python3 3.9.6; uv 0.13.6; specify --help available.
-
-## Confirmed authentication follow-up
-On 2026-10-29 the user confirmed email/password with email verification and password recovery. Copilot recorded D10, updated FR-001 and the account-access journey, and added AC-D10 and a dated clarification session. Other unanswered questions and human review remain pending.
+Publication is complete after the final document update. Actual course submission remains pending because the course/assignment destination has not been supplied.

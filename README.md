@@ -10,13 +10,17 @@ Download [SplitSmart-SpecKit.zip](SplitSmart-SpecKit.zip) and extract it into a 
 - [Final AI-assisted document review and remaining steps](REVIEW.md)
 - [Original customer request](UserRequirement.md)
 - [Project constitution](.specify/memory/constitution.md)
-- [Feature specification, MVP proposal, and clarification questions](specs/001-splitsmart/spec.md)
+- [Approved feature specification and question resolutions](specs/001-splitsmart/spec.md)
 - [Requirements review checklist](specs/001-splitsmart/checklists/requirements.md)
 
-## Completed and pending work
-Spec Kit 1.2.5 was initialized using `specify init . --integration copilot --force --non-interactive`. Initial drafts were authored in Codex, then reviewed and revised through `/speckit-constitution` and `/speckit-specify` in VS Code 1.144.0 Copilot Agent mode on 2026-10-29. `/speckit-clarify` also ran, asked a follow-up login-method question, and incorporated the user-confirmed email/password, email verification, and password recovery choice as D10. The user confirmed initial clarification decisions D1–D10 on 2026-10-29; remaining details and human review are pending. Public GitHub submission URL: https://github.com/nasrhuss-gif/SplitSmart .
+## Completed lab work
+Spec Kit 1.2.5 initialized the Copilot integration. `/speckit-constitution`, `/speckit-specify`, and `/speckit-clarify` were performed in VS Code 1.144.0 Copilot Agent mode. User-confirmed D1–D23 are incorporated into the final specification, decision log, and acceptance cases. On 2026-10-29 the user explicitly confirmed review/approval of the constitution, specification, and checklist subject to incorporating D11–D23; incorporation is complete. See [final review](REVIEW.md) and [approved policy set](APPROVED-DECISIONS.md).
 
-The full customer scope includes web, Android, and iOS. Java Swing is a proposed lab MVP implementation, with an explicit scope decision still required. All original features remain in the inventory, including proposed deferrals. Optional custom reporting remains tentative.
+The approved Java Swing lab MVP includes accounts, groups/private pairs, both split methods, receipts, in-app notifications, manager review/reversals, balances, confirmed settlement records, and date-filtered reports/CSV. The full customer requirement for primary web plus Android/iOS remains in scope for later increments. No application is implemented in this specification lab.
+
+**Submission URL**: https://github.com/nasrhuss-gif/SplitSmart
+
+Only course submission remains: paste that URL into the Lab 6 assignment. The course submission page has not been supplied.
 
 ## Environment check on 2026-10-29
 The execution terminal reported Python 3.9.6 through `python3`; `python` and `py` were unavailable. Git 2.50.1 is available. `uv`, `specify`, `code`, and `gh` were initially absent from PATH. These checks were initially run in the Codex execution terminal, then repeated through Copilot terminal tools in VS Code 1.144.0: `python` and `py` were unavailable, `python3` reported 3.9.6, project-local `uv` reported 0.13.6, and `specify --help` displayed successfully.
@@ -77,4 +81,4 @@ settlement. Do not silently invent answers. Record decisions
 and update the specification only after confirmation.
 ```
 
-The three prompts above have now been run in Copilot Agent mode. Confirm any remaining questions, then have a human review all three documents. Commit the reviewed changes, push to the intended public GitHub repository, and verify the project URL while signed out before submitting it. Repository destination: https://github.com/nasrhuss-gif/SplitSmart . Initial clarification decisions D1–D10 are confirmed; remaining details and human review are pending.
+The three prompts above have been run. Clarification decisions and human document approval are recorded, the final documents are committed/published, and the repository is public. The remaining step is submitting the repository URL to the course assignment page.
