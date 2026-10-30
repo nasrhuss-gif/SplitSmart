@@ -32,13 +32,13 @@
 - [x] Success criteria define how acceptance outcomes will be verified; implementation achievement is not claimed.
 - [x] The Java 21/Maven/Swing/JUnit 5/PlantUML constraints are labeled as lab engineering decisions, not customer requirements.
 - [x] UserRequirement.md remains unchanged and all 16 source capabilities remain in the inventory.
-- [x] Confirmed decisions D1-D9 remain in clarification-decisions.md and AC-D1-AC-D9 remain in the specification.
+- [x] Confirmed decisions D1-D10 remain in clarification-decisions.md and AC-D1-AC-D10 remain in the specification.
 - [x] The proposed Java Swing MVP and its deferrals are labeled as not customer-approved.
 - [x] No Java code was generated.
 
 ## Pending Review
 
-- [ ] Customer confirms remaining Q1-Q13 details and the proposed MVP/platform boundaries.
+- [ ] Customer confirms remaining Q1-Q13 details, including open Q6 data-protection and access-permission details, and the proposed MVP/platform boundaries.
 - [ ] Human reviewer records name, date, findings, and disposition.
 
 ## Notes
@@ -46,4 +46,4 @@
 - All three customer-requested platforms remain in scope; a Swing demonstration does not satisfy web, Android, or iOS requirements.
 - Custom reporting remains tentative as stated in the customer request.
 - Open monetary, access, approval, notification, receipt, reporting, and quality details must not be treated as decided until confirmed.
-- `/speckit-clarify` ran in VS Code Copilot Agent mode and asked the login-method follow-up. The answer remains pending; final customer-approved scope is not claimed.
+- `/speckit-clarify` ran in VS Code Copilot Agent mode and asked the login-method follow-up. The user confirmed the answer as D10, now recorded in the spec and decision log; remaining details and final customer-approved scope are still pending.
