@@ -1,22 +1,49 @@
-# Requirements quality review
+# Specification Quality Checklist: SplitSmart Expense Sharing
 
-Review: 2026-10-29, AI-assisted self-review. Human review pending.
+**Purpose**: Review completeness and readiness of the specification before clarification or planning
+**Created**: 2026-10-29
+**Feature**: [spec.md](../spec.md)
+**Review**: 2026-10-29, AI-assisted self-review; human review pending
 
-- [x] Source customer request preserved in UserRequirement.md.
-- [x] Inventory includes accounts, groups, expenses, equal/percentage splitting, optional receipts, involved users, notifications, approval, balances, payments, reporting, and all three platforms.
-- [x] Optional custom reporting retains its tentative source wording.
-- [x] Requirements have stable IDs and acceptance criteria.
-- [x] Actors and user scenarios identified.
-- [x] Engineering decisions distinguished from customer requirements.
-- [x] Swing MVP and deferred features separately labeled as proposals.
-- [x] Monetary invariants and unapproved-expense exclusion documented.
-- [x] Payer, membership, rounding, invalid values, percentages, authentication, notification, and settlement ambiguities explicitly recorded.
-- [x] No Java code generated.
-- [x] User confirmed initial lab rules D1–D9 on 2026-10-29; see clarification-decisions.md.
-- [ ] Customer confirms remaining question details and MVP boundaries.
-- [x] Acceptance cases AC-D1–AC-D9 added for confirmed monetary and workflow rules.
-- [ ] Human reviewer records name, date, findings, and acceptance.
-- [x] Actual Spec Kit 1.2.5 initialization with Copilot integration verified.
-- [x] Project committed to public repository https://github.com/nasrhuss-gif/SplitSmart (publication step; customer clarification remains pending).
+**Review Ownership**: Marked items record the current self-review, not customer approval or implementation completion.
 
-Finding: the original platform requirement and Swing lab constraint differ. This is visible in the inventory and MVP section and remains unresolved with the customer. Clarification is pending; unchecked items are not completed steps.
+## Content Quality
+
+- [x] The customer-facing requirements focus on user needs; lab technology choices are isolated in the non-functional requirements and proposed MVP sections.
+- [x] The specification preserves the customer request as the source of product scope.
+- [x] Actors and scenarios use stakeholder-oriented descriptions.
+- [x] Mandatory user scenarios, requirements, key entities, success criteria, and assumptions are present.
+
+## Requirement Completeness
+
+- [x] No `[NEEDS CLARIFICATION]` markers remain; unresolved details are explicitly listed as Q1-Q13.
+- [x] Confirmed behaviors are testable, and acceptance criteria do not silently decide open questions.
+- [x] Success criteria have measurable verification outcomes.
+- [x] Success criteria are technology-agnostic.
+- [x] Primary user journeys include Given/When/Then acceptance scenarios.
+- [x] Edge cases cover amounts, membership, allocation, approval, payments, receipts, and access.
+- [x] Full customer scope and proposed MVP boundaries are explicitly distinguished.
+- [x] Assumptions and outstanding dependencies are identified.
+
+## Feature Readiness
+
+- [x] FR-001 through FR-016 each retain an observable acceptance criterion.
+- [x] User scenarios cover account access, groups, expenses, review, notification, balances, payments, reports, and platforms.
+- [x] Success criteria define how acceptance outcomes will be verified; implementation achievement is not claimed.
+- [x] The Java 21/Maven/Swing/JUnit 5/PlantUML constraints are labeled as lab engineering decisions, not customer requirements.
+- [x] UserRequirement.md remains unchanged and all 16 source capabilities remain in the inventory.
+- [x] Confirmed decisions D1-D9 remain in clarification-decisions.md and AC-D1-AC-D9 remain in the specification.
+- [x] The proposed Java Swing MVP and its deferrals are labeled as not customer-approved.
+- [x] No Java code was generated.
+
+## Pending Review
+
+- [ ] Customer confirms remaining Q1-Q13 details and the proposed MVP/platform boundaries.
+- [ ] Human reviewer records name, date, findings, and disposition.
+
+## Notes
+
+- All three customer-requested platforms remain in scope; a Swing demonstration does not satisfy web, Android, or iOS requirements.
+- Custom reporting remains tentative as stated in the customer request.
+- Open monetary, access, approval, notification, receipt, reporting, and quality details must not be treated as decided until confirmed.
+- `/speckit-clarify` ran in VS Code Copilot Agent mode and asked the login-method follow-up. The answer remains pending; final customer-approved scope is not claimed.
