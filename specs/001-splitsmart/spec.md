@@ -1,6 +1,6 @@
 # SplitSmart feature specification
 
-Status: DRAFT — clarification and human review pending
+Status: DRAFT — initial clarification decisions confirmed; remaining details and human review pending
 Date: 2026-10-29
 Authority: ../../UserRequirement.md
 Engineering constraints: ../../.specify/memory/constitution.md
@@ -59,7 +59,8 @@ Candidate inclusion: account access (FR-001), basic groups (FR-002), expense fie
 
 Proposed deferral: receipt images (FR-006), notifications (FR-008), optional custom reports (FR-013), web (FR-014), Android (FR-015), and iOS (FR-016). These remain customer inventory items, not deleted features. The MVP scope and every simplifying choice require human confirmation. Q1–Q9 block final behavioral acceptance criteria for affected MVP features. Local persistence, mock login, single-review approval, in-app notification, single payer, and a specific currency are not approved defaults.
 
-## Clarification questions — no answers confirmed
+## Clarification questions — partially resolved
+Confirmed answers D1–D9 are recorded in [clarification-decisions.md](clarification-decisions.md). Questions below remain the inventory; only the portions explicitly covered by D1–D9 are resolved.
 | ID | Question | Affected requirements |
 |---|---|---|
 | Q1 | Is there one payer or multiple payers? Can the payer be excluded from participants? Can creator and payer differ? How are payer contributions recorded? | FR-003–005, FR-007, FR-010 |
@@ -77,4 +78,16 @@ Proposed deferral: receipt images (FR-006), notifications (FR-008), optional cus
 | Q13 | What measurable performance, capacity, accessibility, availability, retention, and recovery targets apply? | NFR-006 |
 
 ## Decision log and readiness
-No clarification answers have been confirmed. Ask the customer, record the exact answer with date and approver, then update affected requirements and acceptance cases. Do not turn proposed options into decisions. This draft is suitable for review, not an implementation baseline or a claim of completed clarification.
+On 2026-10-29 the user confirmed decisions D1–D9 in clarification-decisions.md. These supersede unanswered portions of Q1–Q9 only as explicitly stated. Remaining details require further confirmation. This draft remains subject to human review; the MVP deferral list has not been approved.
+
+
+## Acceptance cases for confirmed decisions
+- AC-D1 (FR-003/007/010): An expense has exactly one recorded payer. That payer may also occur in the participant list. Multiple payers are outside the confirmed lab rule.
+- AC-D2 (FR-007): Reject selection of a user who is not a current member of the expense group.
+- AC-D3 (FR-004): Given USD 10.00 and three equal participants whose confirmed stable order is A, B, C, allocate 3.34, 3.33, and 3.33. Shares total 10.00. The ordering key still needs definition.
+- AC-D4 (FR-003): Reject 0, negative, and malformed expense amounts; do not create a posted financial effect.
+- AC-D5 (FR-005): For USD 10.00 and valid percentages 60/40, allocate 6.00/4.00. Reject totals of 90% or 110%. Percentage precision and fractional rounding remain open.
+- AC-D6 (FR-001): Account holders must authenticate through real login before accessing their own information. Mock identity selection does not meet D6; mechanism and recovery remain open.
+- AC-D7 (FR-008): Submission triggers an in-app expense notification. Exact recipients and delivery details still require confirmation.
+- AC-D8 (FR-009/010): A submitted expense has no balance effect until one group-manager approval. Approval posts the expense once; additional approval levels are not required by D8.
+- AC-D9 (FR-011): Given A owes B USD 20.00, recording A's USD 5.00 payment to B leaves USD 15.00 owed. Reject a USD 25.00 payment against that original USD 20.00 debt. Confirmation, reversals, and duplicate detection remain open.
