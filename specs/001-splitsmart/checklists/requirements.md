@@ -20,7 +20,7 @@
 - [x] Monetary conservation, one-effect operation IDs, and approval/confirmation before posting are explicit.
 - [x] Proposed decisions were confirmed before being treated as requirements.
 - [x] Constitution v1.2.0 records the actual user review approval.
-- [x] AI-assisted review findings and corrections are documented in REVIEW.md.
+- [x] Document review findings and corrections are documented in REVIEW.md.
 - [x] No Java code or working application is claimed.
 - [x] Software checks and all three Spec Kit commands were performed through VS Code Copilot Agent workflow.
 - [x] Publication package contains the complete initialized project and browsable core documents.
